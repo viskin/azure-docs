@@ -154,7 +154,27 @@ In the examples in this article, we use the Service Fabric template.json. You ca
 
     ```
 
-5. Deploy the template:
+5. Comment out another reference to subnet0Prefix from virtualMachineProfile:
+
+    ```
+    "type": "ServiceFabricNode",
+    "autoUpgradeMinorVersion": true,
+    "protectedSettings": {
+        "StorageAccountKey1": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('supportLogStorageAccountName')),'2015-05-01-preview').key1]",
+        "StorageAccountKey2": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('supportLogStorageAccountName')),'2015-05-01-preview').key2]"
+    },
+    "publisher": "Microsoft.Azure.ServiceFabric",
+    "settings": {
+        "clusterEndpoint": "[reference(parameters('clusterName')).clusterEndpoint]",
+        "nodeTypeRef": "[parameters('vmNodeType0Name')]",
+        "dataPath": "D:\\\\SvcFab",
+        "durabilityLevel": "Bronze",
+        "enableParallelJobs": true/*,
+        "nicPrefixOverride": "[parameters('subnet0Prefix')]"*/
+    },
+    ```
+
+6. Deploy the template:
 
     ```powershell
     New-AzureRmResourceGroup -Name sfnetworkingexistingvnet -Location westus
